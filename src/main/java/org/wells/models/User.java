@@ -5,7 +5,8 @@ import javax.persistence.*;
 
 @Entity
 public class User {
-    @Id
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int userId;
     @Column(unique = true, nullable = false)
@@ -23,6 +24,21 @@ public class User {
     @Column(nullable = false, columnDefinition = "bit default 0")
     private boolean confirmed;
 
+    public User() {}
+    
+    public User(int userId, String username, String firstName, String lastName, UserTypes userType, String email,
+			String mobile, boolean confirmed) {
+		super();
+		this.userId = userId;
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userType = userType;
+		this.email = email;
+		this.mobile = mobile;
+		this.confirmed = confirmed;
+	}
+    
     public int getUserId() {
         return userId;
     }
