@@ -1,4 +1,4 @@
-package com.wellsfargo.stockmarket.authentication;
+package org.wells;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
