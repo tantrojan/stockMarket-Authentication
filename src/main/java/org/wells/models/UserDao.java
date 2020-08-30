@@ -4,16 +4,20 @@ import org.wells.models.enums.UserTypes;
 import javax.persistence.*;
 
 @Entity
-public class User {
+@Table(name ="user")
+public class UserDao {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
     @Column(unique = true, nullable = false)
     private String username;
     @Column(nullable = false)
     private String firstName;
-    private String lastName;
+    @Column(nullable = false)
+    private String password;
+
+	private String lastName;
     @Column(nullable = false, columnDefinition = "ENUM('CONSUMER', 'ADMIN') default 'CONSUMER'")
     @Enumerated(EnumType.STRING)
     private UserTypes userType;
@@ -24,9 +28,9 @@ public class User {
     @Column(nullable = false, columnDefinition = "bit default 0")
     private boolean confirmed;
 
-    public User() {}
+    public UserDao() {}
     
-    public User(int userId, String username, String firstName, String lastName, UserTypes userType, String email,
+    public UserDao(int userId, String username, String firstName, String lastName, UserTypes userType, String email,
 			String mobile, boolean confirmed) {
 		super();
 		this.userId = userId;
@@ -54,6 +58,15 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 
     public String getFirstName() {
         return firstName;
