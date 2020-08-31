@@ -1,7 +1,6 @@
-package org.wells.filters;
+package org.wells.util;
 
-import org.wells.services.MyUserDetailsService;
-import org.wells.util.JwtUtil;
+import org.wells.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private AuthenticationService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;

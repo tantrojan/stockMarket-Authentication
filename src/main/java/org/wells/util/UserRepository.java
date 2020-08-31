@@ -1,10 +1,10 @@
 package org.wells.util;
 
-import org.wells.models.UserDao;
+import org.wells.models.User;
 
 import org.springframework.data.repository.CrudRepository;
-public interface UserRepository extends CrudRepository<UserDao, Integer> {
-    UserDao findByUsername(String username);
+public interface UserRepository extends CrudRepository<User, Integer> {
+    User findByUsername(String username);
     
-    UserDao save(UserDao entity);
+    User save(User entity);
 }

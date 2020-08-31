@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.wells.filters.JwtRequestFilter;
 import org.wells.models.AddUserRequest;
 import org.wells.models.LoginRequest;
 import org.wells.models.LoginResponse;
-import org.wells.services.MyUserDetailsService;
+import org.wells.services.AuthenticationService;
+import org.wells.util.JwtRequestFilter;
 import org.wells.util.JwtUtil;
 
 @RestController
-class HelloWorldController {
+class AuthenticationController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -37,7 +37,7 @@ class HelloWorldController {
 	private JwtUtil jwtTokenUtil;
 
 	@Autowired
-	private MyUserDetailsService userDetailsService;
+	private AuthenticationService userDetailsService;
 
 	@RequestMapping({ "/hello" })
 	public String firstPage() {

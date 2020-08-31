@@ -6,21 +6,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.wells.models.AddUserRequest;
-import org.wells.models.UserDao;
+import org.wells.models.User;
 import org.wells.models.enums.UserTypes;
 import org.wells.util.UserRepository;
 
 import java.util.ArrayList;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class AuthenticationService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
 	
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDao user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         
         if(user==null) {
         	throw new UsernameNotFoundException("User not found with username: " + username);
@@ -32,8 +32,8 @@ public class MyUserDetailsService implements UserDetailsService {
     }
     
     
-	public UserDao save(AddUserRequest userRequest) {
-		UserDao newUser = new UserDao();
+	public User save(AddUserRequest userRequest) {
+		User newUser = new User();
 		newUser.setUsername(userRequest.getUsername());
 		newUser.setPassword(userRequest.getPassword());
 		newUser.setFirstName(userRequest.getFirstName());
