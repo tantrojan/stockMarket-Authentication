@@ -1,6 +1,6 @@
-package org.wells.models;
+package org.wells.entity;
 
-import org.wells.models.enums.UserTypes;
+import org.wells.entity.enums.UserTypes;
 
 public class AddUserRequest {
 

@@ -1,4 +1,4 @@
-package org.wells.models;
+package org.wells.entity;
 
 import java.io.Serializable;
 

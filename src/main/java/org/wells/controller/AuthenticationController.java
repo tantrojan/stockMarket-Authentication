@@ -1,4 +1,4 @@
-package org.wells.controllers;
+package org.wells.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,15 +23,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.wells.models.AddUserRequest;
-import org.wells.models.LoginRequest;
-import org.wells.models.LoginResponse;
-import org.wells.services.AuthenticationService;
+import org.wells.entity.AddUserRequest;
+import org.wells.entity.LoginRequest;
+import org.wells.entity.LoginResponse;
+import org.wells.service.AuthenticationService;
 import org.wells.util.JwtRequestFilter;
 import org.wells.util.JwtUtil;
 
 @RestController
-class AuthenticationController {
+public class AuthenticationController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -47,7 +47,32 @@ class AuthenticationController {
 		return "Hello World";
 	}
 
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@RequestMapping(value = "/adminlogin", method = RequestMethod.POST)
+	public ResponseEntity<?> createAuthenticationTokenAdmin(@RequestBody LoginRequest loginRequest) throws Exception {
+
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+			);
+			
+			
+		}
+		catch (BadCredentialsException e) {
+			return new ResponseEntity<>("Error: Incorrect username or password" , HttpStatus.FORBIDDEN);
+		}
+
+		if(!userDetailsService.checkAdmin(loginRequest))
+			return new ResponseEntity<>("Error: User not Admin" , HttpStatus.FORBIDDEN);
+		
+		final UserDetails userDetails = userDetailsService
+				.loadUserByUsername(loginRequest.getUsername());
+
+		final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+		return ResponseEntity.ok(new LoginResponse(jwt));
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
 
 		try {
@@ -56,7 +81,7 @@ class AuthenticationController {
 			);
 		}
 		catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password", e);
+			return new ResponseEntity<>("Error: Incorrect username or password" , HttpStatus.FORBIDDEN);
 		}
 
 
@@ -68,55 +93,20 @@ class AuthenticationController {
 		return ResponseEntity.ok(new LoginResponse(jwt));
 	}
 	
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody AddUserRequest user) throws DataIntegrityViolationException {
 		
 		boolean value = userDetailsService.checkExistingUserName(user);
 		if(value==false)
-			return new ResponseEntity<>("User already exists with username: "+ user.getUsername() , HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>("Error: User already exists with username: "+ user.getUsername() , HttpStatus.FORBIDDEN);
 		value= userDetailsService.checkExistingEmail(user);
 		if(value==false)
-			return new ResponseEntity<>("User already exists with email: "+ user.getEmail() , HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>("Error: User already exists with email: "+ user.getEmail() , HttpStatus.FORBIDDEN);
 		value =userDetailsService.checkExistingMobile(user);
 		if(value==false)
-			return new ResponseEntity<>("User already exists with mobile number: "+ user.getMobile() , HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>("Error: User already exists with mobile number: "+ user.getMobile() , HttpStatus.FORBIDDEN);
 		
 		return ResponseEntity.ok(userDetailsService.save(user));
 }
 
-@EnableWebSecurity
-class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	@Autowired
-	private UserDetailsService myUserDetailsService;
-	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(myUserDetailsService);
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
-	}
-
-	@Override
-	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
-
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/authenticate","/register").permitAll().
-						anyRequest().authenticated().and().
-						exceptionHandling().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-	}
-}
 }
