@@ -2,6 +2,8 @@ package org.wells.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -66,10 +69,19 @@ class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody AddUserRequest user) throws Exception {
+	public ResponseEntity<?> saveUser(@RequestBody AddUserRequest user) throws DataIntegrityViolationException {
+		
+		boolean value = userDetailsService.checkExistingUserName(user);
+		if(value==false)
+			return new ResponseEntity<>("User already exists with username: "+ user.getUsername() , HttpStatus.FORBIDDEN);
+		value= userDetailsService.checkExistingEmail(user);
+		if(value==false)
+			return new ResponseEntity<>("User already exists with email: "+ user.getEmail() , HttpStatus.FORBIDDEN);
+		value =userDetailsService.checkExistingMobile(user);
+		if(value==false)
+			return new ResponseEntity<>("User already exists with mobile number: "+ user.getMobile() , HttpStatus.FORBIDDEN);
+		
 		return ResponseEntity.ok(userDetailsService.save(user));
-	}
-
 }
 
 @EnableWebSecurity
@@ -106,5 +118,5 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 	}
-
+}
 }

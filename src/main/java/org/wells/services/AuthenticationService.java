@@ -1,6 +1,7 @@
 package org.wells.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,25 @@ public class AuthenticationService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				new ArrayList<>());
     }
+    
+    public boolean checkExistingUserName(AddUserRequest user) throws DataIntegrityViolationException {
+        User user1 = userRepository.findByUsername(user.getUsername());
+        if(user1==null)
+        	return true;
+        return false;
+    	}
+    public boolean checkExistingEmail(AddUserRequest user) throws DataIntegrityViolationException {
+        User user1 = userRepository.findByEmail(user.getEmail());   
+        if(user1==null)
+        	return true;
+        return false;
+    	}
+    public boolean checkExistingMobile(AddUserRequest user) throws DataIntegrityViolationException {
+        User user1 = userRepository.findByMobile(user.getMobile());
+        if(user1==null)
+        	return true;
+        return false;
+    	}
     
     
 	public User save(AddUserRequest userRequest) {
