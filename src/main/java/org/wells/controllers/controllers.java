@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.wells.filters.JwtRequestFilter;
-import org.wells.models.AuthenticationRequest;
-import org.wells.models.AuthenticationResponse;
+import org.wells.models.AddUserRequest;
+import org.wells.models.LoginRequest;
+import org.wells.models.LoginResponse;
 import org.wells.services.MyUserDetailsService;
 import org.wells.util.JwtUtil;
 
@@ -44,11 +45,11 @@ class HelloWorldController {
 	}
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
 
 		try {
 			authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
 			);
 		}
 		catch (BadCredentialsException e) {
@@ -57,11 +58,16 @@ class HelloWorldController {
 
 
 		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
+				.loadUserByUsername(loginRequest.getUsername());
 
 		final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+		return ResponseEntity.ok(new LoginResponse(jwt));
+	}
+	
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ResponseEntity<?> saveUser(@RequestBody AddUserRequest user) throws Exception {
+		return ResponseEntity.ok(userDetailsService.save(user));
 	}
 
 }

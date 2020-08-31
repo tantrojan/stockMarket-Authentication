@@ -2,7 +2,7 @@ package org.wells.models;
 
 import java.io.Serializable;
 
-public class AuthenticationRequest implements Serializable {
+public class LoginRequest implements Serializable {
 
 
     private String username;
@@ -25,12 +25,12 @@ public class AuthenticationRequest implements Serializable {
     }
 
     //need default constructor for JSON Parsing
-    public AuthenticationRequest()
+    public LoginRequest()
     {
 
     }
 
-    public AuthenticationRequest(String username, String password) {
+    public LoginRequest(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
     }

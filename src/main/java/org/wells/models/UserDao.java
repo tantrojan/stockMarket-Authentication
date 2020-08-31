@@ -28,21 +28,6 @@ public class UserDao {
     @Column(nullable = false, columnDefinition = "bit default 0")
     private boolean confirmed;
 
-    public UserDao() {}
-    
-    public UserDao(int userId, String username, String firstName, String lastName, UserTypes userType, String email,
-			String mobile, boolean confirmed) {
-		super();
-		this.userId = userId;
-		this.username = username;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userType = userType;
-		this.email = email;
-		this.mobile = mobile;
-		this.confirmed = confirmed;
-	}
-    
     public int getUserId() {
         return userId;
     }

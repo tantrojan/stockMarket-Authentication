@@ -2,11 +2,11 @@ package org.wells.models;
 
 import java.io.Serializable;
 
-public class AuthenticationResponse implements Serializable {
+public class LoginResponse implements Serializable {
 
     private final String jwt;
 
-    public AuthenticationResponse(String jwt) {
+    public LoginResponse(String jwt) {
         this.jwt = jwt;
     }
 
