@@ -6,10 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.wells.entity.AddUserRequest;
-import org.wells.entity.LoginRequest;
-import org.wells.entity.User;
-import org.wells.entity.enums.UserTypes;
+import org.wells.models.AddUserRequest;
+import org.wells.models.LoginRequest;
+import org.wells.models.User;
+import org.wells.models.enums.UserTypes;
 import org.wells.util.UserRepository;
 
 import java.util.ArrayList;

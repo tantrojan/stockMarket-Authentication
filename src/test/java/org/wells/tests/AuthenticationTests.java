@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.wells.entity.AddUserRequest;
-import org.wells.entity.User;
+import org.wells.models.AddUserRequest;
+import org.wells.models.User;
 import org.wells.service.AuthenticationService;
 
 @DataJpaTest

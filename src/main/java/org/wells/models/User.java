@@ -1,8 +1,8 @@
-package org.wells.entity;
+package org.wells.models;
 
 import javax.persistence.*;
 
-import org.wells.entity.enums.UserTypes;
+import org.wells.models.enums.UserTypes;
 
 @Entity
 @Table(name ="user")
