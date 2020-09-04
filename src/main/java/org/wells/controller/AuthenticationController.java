@@ -1,34 +1,22 @@
 package org.wells.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.wells.models.AddUserRequest;
 import org.wells.models.LoginRequest;
 import org.wells.models.LoginResponse;
 import org.wells.models.User;
 import org.wells.service.AuthenticationService;
-import org.wells.util.JwtRequestFilter;
 import org.wells.util.JwtUtil;
 
 @RestController
@@ -48,6 +36,7 @@ public class AuthenticationController {
 		return "Hello World";
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/adminlogin", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationTokenAdmin(@RequestBody LoginRequest loginRequest) throws Exception {
 
@@ -73,6 +62,7 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new LoginResponse(jwt));
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
 
@@ -94,6 +84,7 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new LoginResponse(jwt));
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/signin", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody User user) throws DataIntegrityViolationException {
 		
